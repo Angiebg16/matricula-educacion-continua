@@ -1,0 +1,3 @@
+# El archivo manual puede traer datos personales: no se sube a GitHub
+data/manual/
+__pycache__/

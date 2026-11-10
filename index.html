@@ -144,8 +144,7 @@ fetch('data/summary.json?t=' + Date.now())
     bars($('horario'), s.horario);
     bars($('provincia'), s.provincia);
     $('note').textContent = s.personal_data_public
-      ? 'El archivo descargable incluye datos personales.'
-      : 'El archivo descargable no incluye cédula, nombre, teléfonos ni correo.';
+      ? 'El archivo descargable incluye datos personales.';
   })
   .catch(() => { $('updated').textContent = 'no se pudo cargar'; });
 </script>

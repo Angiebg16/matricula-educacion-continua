@@ -4,5 +4,12 @@
   "survey_id": "613296",
   "timezone": "America/Costa_Rica",
   "language": "es",
-  "publish_personal_data": false
+  "publish_personal_data": false,
+  "sectores": [
+    "Gobierno Central",
+    "Resto del sector público",
+    "Sector privado",
+    "Organismos internacionales",
+    "Otro"
+  ]
 }

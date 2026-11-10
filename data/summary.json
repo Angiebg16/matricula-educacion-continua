@@ -1,74 +1,66 @@
 {
   "title": "Matrícula 2027",
   "subtitle": "Educación Continua en Estadística",
-  "updated_at": "2026-11-10T17:24-06:00",
-  "total": 11,
-  "incompletas": 4,
-  "courses": [
-    {
-      "label": "Programación en R para el análisis de datos",
-      "value": 11,
-      "pct": 100.0
-    }
-  ],
-  "grado": [
-    {
-      "label": "Maestría",
-      "value": 6
-    },
-    {
-      "label": "Bachillerato",
-      "value": 3
-    },
-    {
-      "label": "Licenciatura",
-      "value": 2
-    }
-  ],
-  "horario": [
-    {
-      "label": "De 5:00 p. m. a 9:00 p. m.",
-      "value": 6
-    },
-    {
-      "label": "De 8:00 a. m. a 12:00 m. d. (medio día)",
-      "value": 3
-    },
-    {
-      "label": "Me sirve cualquiera de los dos horarios",
-      "value": 2
-    }
-  ],
+  "updated_at": "2026-11-10T17:54-06:00",
+  "incompletas": 0,
+  "courses": [],
+  "personal_data_public": false,
+  "total": 0,
+  "grado": [],
+  "horario": [],
   "provincia": [
     {
       "label": "San José",
-      "value": 8
-    },
-    {
-      "label": "Cartago",
-      "value": 2
+      "value": 0
     },
     {
       "label": "Alajuela",
-      "value": 1
-    }
-  ],
-  "daily": [
-    {
-      "date": "2026-10-15",
-      "nuevos": 6,
-      "acumulado": 6
+      "value": 0
     },
     {
-      "date": "2026-10-16",
-      "nuevos": 4,
-      "acumulado": 10
+      "label": "Cartago",
+      "value": 0
     },
     {
-      "date": "2026-10-22",
-      "nuevos": 1,
-      "acumulado": 11
+      "label": "Heredia",
+      "value": 0
+    },
+    {
+      "label": "Guanacaste",
+      "value": 0
+    },
+    {
+      "label": "Puntarenas",
+      "value": 0
+    },
+    {
+      "label": "Limón",
+      "value": 0
     }
   ],
-  "personal_data_public": false
+  "provincia_sin_dato": 0,
+  "sector": [
+    {
+      "label": "Gobierno Central",
+      "value": 0
+    },
+    {
+      "label": "Resto del sector público",
+      "value": 0
+    },
+    {
+      "label": "Sector privado",
+      "value": 0
+    },
+    {
+      "label": "Organismos internacionales",
+      "value": 0
+    },
+    {
+      "label": "Otro",
+      "value": 0
+    }
+  ],
+  "sector_sin_dato": 0,
+  "daily": []
 }

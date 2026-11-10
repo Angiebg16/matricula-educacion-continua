@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 import urllib.request
 from collections import Counter
 from datetime import datetime, timezone
@@ -37,10 +38,11 @@ ALL_COLUMNS = [
     ("A7", "Grado académico"),
     ("A8", "Área de estudio"),
     ("A14", "Horario preferido"),
-    ("A3_SQ1", "Provincia"),
+    ("PROV", "Provincia"),
     ("A3_SQ2", "Cantón"),
     ("A3_SQ3", "Distrito"),
     ("A9", "Lugar de trabajo"),
+    ("SLA1", "Sector institucional"),
     ("A1_SQ1", "Nombre"),
     ("A1_SQ2", "Primer apellido"),
     ("A1_SQ3", "Segundo apellido"),
@@ -111,14 +113,62 @@ def fetch_manual():
     return parse_csv(MANUAL.read_text(encoding="utf-8-sig"))
 
 
-def clean_province(v):
-    v = re.sub(r"^provincia de\s+", "", v.strip(), flags=re.I)
-    return v.title() if v.islower() else v
+PROVINCIAS = ["San José", "Alajuela", "Cartago", "Heredia",
+              "Guanacaste", "Puntarenas", "Limón"]
 
 
-def counts(values):
+def _fold(v):
+    v = unicodedata.normalize("NFD", v.strip().lower())
+    return "".join(ch for ch in v if unicodedata.category(ch) != "Mn")
+
+
+def normalize_province(v):
+    """Lleva cualquier texto de provincia a una de las 7 (o lo deja limpio)."""
+    v = re.sub(r"^provincia de\s+", "", (v or "").strip(), flags=re.I)
+    for p in PROVINCIAS:
+        if _fold(v) == _fold(p):
+            return p
+    return v
+
+
+SECTORES = CONFIG.get("sectores", [])
+
+
+def counts(values, fixed=()):
+    """Cuenta valores; las categorías fijas salen siempre, aunque tengan 0."""
     c = Counter(v for v in values if v)
-    return [{"label": k, "value": n} for k, n in c.most_common()]
+    out = [{"label": k, "value": n} for k, n in c.most_common()]
+    seen = {o["label"] for o in out}
+    out += [{"label": f, "value": 0} for f in fixed if f not in seen]
+    return out
+
+
+def missing(values):
+    return sum(1 for v in values if not v)
+
+
+def slug(text):
+    t = re.sub(r"[^a-z0-9]+", "-", _fold(text)).strip("-")
+    return t[:60] or "curso"
+
+
+def stats(subset):
+    """Todos los números de un grupo de matriculados (todos los cursos o uno)."""
+    by_day = Counter(r["submitdate"][:10] for r in subset)
+    acc, daily = 0, []
+    for d in sorted(by_day):
+        acc += by_day[d]
+        daily.append({"date": d, "nuevos": by_day[d], "acumulado": acc})
+    return {
+        "total": len(subset),
+        "grado": counts(r.get("A7", "") for r in subset),
+        "horario": counts(r.get("A14", "") for r in subset),
+        "provincia": counts((r["PROV"] for r in subset), PROVINCIAS),
+        "provincia_sin_dato": missing(r["PROV"] for r in subset),
+        "sector": counts((r.get("SLA1", "") for r in subset), SECTORES),
+        "sector_sin_dato": missing(r.get("SLA1", "") for r in subset),
+        "daily": daily,
+    }
 
 
 def main():
@@ -127,22 +177,38 @@ def main():
     rows = fetch_api() if use_api else fetch_manual()
     print(f"Modo: {'API' if use_api else 'manual'} · filas recibidas: {len(rows)}")
 
+    for r in rows:
+        r["PROV"] = normalize_province(r.get("PROV") or r.get("A3_SQ1", ""))
+
     complete = [r for r in rows if r.get("submitdate")]
     incomplete = len(rows) - len(complete)
     complete.sort(key=lambda r: r.get("submitdate", ""))
-
-    # --- resumen para la página ---
-    by_day = Counter(r["submitdate"][:10] for r in complete)
-    days = sorted(by_day)
-    acc, daily = 0, []
-    for d in days:
-        acc += by_day[d]
-        daily.append({"date": d, "nuevos": by_day[d], "acumulado": acc})
-
     total = len(complete)
-    courses = counts(r.get("A6", "") for r in complete)
-    for c in courses:
-        c["pct"] = round(100 * c["value"] / total, 1) if total else 0
+
+    publish_personal = bool(CONFIG.get("publish_personal_data"))
+    cols = [(c, n) for c, n in ALL_COLUMNS
+            if (publish_personal and c not in NO_CEDULA) or c not in PERSONAL]
+
+    def write_csv(path, subset):
+        with open(path, "w", newline="", encoding="utf-8-sig") as f:
+            w = csv.writer(f, delimiter=";")  # ';' para que Excel en español abra columnas
+            w.writerow([n for _, n in cols])
+            for r in subset:
+                w.writerow([r.get(c, "") for c, _ in cols])
+
+    # --- un bloque de números por curso (se crean solos al aparecer cursos nuevos) ---
+    courses = []
+    keep = {"respuestas.csv"}
+    for c in counts(r.get("A6", "") for r in complete):
+        subset = [r for r in complete if r.get("A6", "") == c["label"]]
+        fname = f"respuestas-{slug(c['label'])}.csv"
+        keep.add(fname)
+        write_csv(DATA / fname, subset)
+        courses.append({**c, "pct": round(100 * c["value"] / total, 1) if total else 0,
+                        "csv": f"data/{fname}", "stats": stats(subset)})
+    for old in DATA.glob("respuestas-*.csv"):   # cursos que ya no existen
+        if old.name not in keep:
+            old.unlink()
 
     tz = ZoneInfo(CONFIG.get("timezone", "America/Costa_Rica"))
     now = datetime.now(timezone.utc).astimezone(tz)
@@ -150,28 +216,15 @@ def main():
         "title": CONFIG["title"],
         "subtitle": CONFIG.get("subtitle", ""),
         "updated_at": now.isoformat(timespec="minutes"),
-        "total": total,
         "incompletas": incomplete,
         "courses": courses,
-        "grado": counts(r.get("A7", "") for r in complete),
-        "horario": counts(r.get("A14", "") for r in complete),
-        "provincia": counts(clean_province(r.get("A3_SQ1", "")) for r in complete),
-        "daily": daily,
-        "personal_data_public": bool(CONFIG.get("publish_personal_data")),
+        "personal_data_public": publish_personal,
+        **stats(complete),
     }
     (DATA / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_csv(DATA / "respuestas.csv", complete)
 
-    # --- CSV descargable ---
-    publish_personal = bool(CONFIG.get("publish_personal_data"))
-    cols = [(c, n) for c, n in ALL_COLUMNS
-            if (publish_personal and c not in NO_CEDULA) or c not in PERSONAL]
-    with open(DATA / "respuestas.csv", "w", newline="", encoding="utf-8-sig") as f:
-        # ';' para que Excel en español lo abra en columnas
-        w = csv.writer(f, delimiter=";")
-        w.writerow([n for _, n in cols])
-        for r in complete:
-            w.writerow([r.get(c, "") for c, _ in cols])
     # --- página de contactos cifrada (solo si existe la contraseña) ---
     pw = os.environ.get("CONTACTOS_PASSWORD", "")
     if pw:
@@ -180,8 +233,8 @@ def main():
         label = now.strftime("%d/%m/%Y %I:%M %p").lower()
         names = dict(ALL_COLUMNS)
         order = ["id", "A1_SQ1", "A1_SQ2", "A1_SQ3", "A13", "A10_SQ3", "A10_SQ1",
-                 "A10_SQ2", "A6", "A3_SQ1", "A3_SQ2", "A3_SQ3", "A9", "A7", "A8",
-                 "A14", "submitdate"]
+                 "A10_SQ2", "A6", "PROV", "A3_SQ2", "A3_SQ3", "A9", "SLA1", "A7",
+                 "A8", "A14", "submitdate"]
         build(complete, [(c, names[c]) for c in order],
               label, ROOT / "contactos.html", pw, CONFIG["title"])
         print("Página de contactos cifrada: generada.")

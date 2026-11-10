@@ -53,6 +53,7 @@ ALL_COLUMNS = [
 # Columnas con datos personales: solo salen si publish_personal_data = true
 PERSONAL = {"A3_SQ3", "A1_SQ1", "A1_SQ2", "A1_SQ3", "A2",
             "A10_SQ1", "A10_SQ2", "A10_SQ3", "A13"}
+NO_CEDULA = {"A2"}  # la cédula nunca se publica
 
 
 def rpc(url, method, params):
@@ -163,13 +164,29 @@ def main():
 
     # --- CSV descargable ---
     publish_personal = bool(CONFIG.get("publish_personal_data"))
-    cols = [(c, n) for c, n in ALL_COLUMNS if publish_personal or c not in PERSONAL]
+    cols = [(c, n) for c, n in ALL_COLUMNS
+            if (publish_personal and c not in NO_CEDULA) or c not in PERSONAL]
     with open(DATA / "respuestas.csv", "w", newline="", encoding="utf-8-sig") as f:
         # ';' para que Excel en español lo abra en columnas
         w = csv.writer(f, delimiter=";")
         w.writerow([n for _, n in cols])
         for r in complete:
             w.writerow([r.get(c, "") for c, _ in cols])
+    # --- página de contactos cifrada (solo si existe la contraseña) ---
+    pw = os.environ.get("CONTACTOS_PASSWORD", "")
+    if pw:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from build_contactos import build
+        label = now.strftime("%d/%m/%Y %I:%M %p").lower()
+        names = dict(ALL_COLUMNS)
+        order = ["id", "A1_SQ1", "A1_SQ2", "A1_SQ3", "A13", "A10_SQ3", "A10_SQ1",
+                 "A10_SQ2", "A6", "A3_SQ1", "A3_SQ2", "A3_SQ3", "A9", "A7", "A8",
+                 "A14", "submitdate"]
+        build(complete, [(c, names[c]) for c in order],
+              label, ROOT / "contactos.html", pw, CONFIG["title"])
+        print("Página de contactos cifrada: generada.")
+    else:
+        print("Sin CONTACTOS_PASSWORD: no se genera la página de contactos.")
     print(f"Listo: {total} matriculados, {incomplete} incompletas. "
           f"CSV con datos personales: {'SÍ' if publish_personal else 'no'}")
 

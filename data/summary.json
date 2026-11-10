@@ -1,13 +1,74 @@
 {
   "title": "Matrícula 2027",
   "subtitle": "Educación Continua en Estadística",
-  "updated_at": "2026-11-10T16:27-06:00",
-  "total": 0,
-  "incompletas": 0,
-  "courses": [],
-  "grado": [],
-  "horario": [],
-  "provincia": [],
-  "daily": [],
+  "updated_at": "2026-11-10T16:51-06:00",
+  "total": 11,
+  "incompletas": 4,
+  "courses": [
+    {
+      "label": "Programación en R para el análisis de datos",
+      "value": 11,
+      "pct": 100.0
+    }
+  ],
+  "grado": [
+    {
+      "label": "Maestría",
+      "value": 6
+    },
+    {
+      "label": "Bachillerato",
+      "value": 3
+    },
+    {
+      "label": "Licenciatura",
+      "value": 2
+    }
+  ],
+  "horario": [
+    {
+      "label": "De 5:00 p. m. a 9:00 p. m.",
+      "value": 6
+    },
+    {
+      "label": "De 8:00 a. m. a 12:00 m. d. (medio día)",
+      "value": 3
+    },
+    {
+      "label": "Me sirve cualquiera de los dos horarios",
+      "value": 2
+    }
+  ],
+  "provincia": [
+    {
+      "label": "San José",
+      "value": 8
+    },
+    {
+      "label": "Cartago",
+      "value": 2
+    },
+    {
+      "label": "Alajuela",
+      "value": 1
+    }
+  ],
+  "daily": [
+    {
+      "date": "2026-10-15",
+      "nuevos": 6,
+      "acumulado": 6
+    },
+    {
+      "date": "2026-10-16",
+      "nuevos": 4,
+      "acumulado": 10
+    },
+    {
+      "date": "2026-10-22",
+      "nuevos": 1,
+      "acumulado": 11
+    }
+  ],
   "personal_data_public": false
 }

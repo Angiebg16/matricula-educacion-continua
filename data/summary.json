@@ -1,16 +1,16 @@
 {
   "title": "Matrícula 2027",
   "subtitle": "Educación Continua en Estadística",
-  "updated_at": "2026-11-10T18:01-06:00",
-  "incompletas": 6,
+  "updated_at": "2026-11-11T13:38-06:00",
+  "incompletas": 5,
   "courses": [
     {
       "label": "Programación en R para el análisis de datos",
-      "value": 11,
+      "value": 12,
       "pct": 100.0,
       "csv": "data/respuestas-programacion-en-r-para-el-analisis-de-datos.csv",
       "stats": {
-        "total": 11,
+        "total": 12,
         "grado": [
           {
             "label": "Maestría",
@@ -18,7 +18,7 @@
           },
           {
             "label": "Bachillerato",
-            "value": 3
+            "value": 4
           },
           {
             "label": "Licenciatura",
@@ -36,20 +36,20 @@
           },
           {
             "label": "Me sirve cualquiera de los dos horarios",
-            "value": 2
+            "value": 3
           }
         ],
         "provincia": [
+          {
+            "label": "Cartago",
+            "value": 1
+          },
           {
             "label": "San José",
             "value": 0
           },
           {
             "label": "Alajuela",
-            "value": 0
-          },
-          {
-            "label": "Cartago",
             "value": 0
           },
           {
@@ -72,11 +72,11 @@
         "provincia_sin_dato": 11,
         "sector": [
           {
-            "label": "Gobierno Central",
-            "value": 0
+            "label": "Resto del sector público",
+            "value": 1
           },
           {
-            "label": "Resto del sector público",
+            "label": "Gobierno Central",
             "value": 0
           },
           {
@@ -108,13 +108,18 @@
             "date": "2026-10-22",
             "nuevos": 1,
             "acumulado": 11
+          },
+          {
+            "date": "2026-11-11",
+            "nuevos": 1,
+            "acumulado": 12
           }
         ]
       }
     }
   ],
   "personal_data_public": false,
-  "total": 11,
+  "total": 12,
   "grado": [
     {
       "label": "Maestría",
@@ -122,7 +127,7 @@
     },
     {
       "label": "Bachillerato",
-      "value": 3
+      "value": 4
     },
     {
       "label": "Licenciatura",
@@ -140,20 +145,20 @@
     },
     {
       "label": "Me sirve cualquiera de los dos horarios",
-      "value": 2
+      "value": 3
     }
   ],
   "provincia": [
+    {
+      "label": "Cartago",
+      "value": 1
+    },
     {
       "label": "San José",
       "value": 0
     },
     {
       "label": "Alajuela",
-      "value": 0
-    },
-    {
-      "label": "Cartago",
       "value": 0
     },
     {
@@ -176,11 +181,11 @@
   "provincia_sin_dato": 11,
   "sector": [
     {
-      "label": "Gobierno Central",
-      "value": 0
+      "label": "Resto del sector público",
+      "value": 1
     },
     {
-      "label": "Resto del sector público",
+      "label": "Gobierno Central",
       "value": 0
     },
     {
@@ -212,6 +217,11 @@
       "date": "2026-10-22",
       "nuevos": 1,
       "acumulado": 11
+    },
+    {
+      "date": "2026-11-11",
+      "nuevos": 1,
+      "acumulado": 12
     }
   ]
 }

@@ -1,13 +1,148 @@
 {
   "title": "Matrícula 2027",
   "subtitle": "Educación Continua en Estadística",
-  "updated_at": "2026-11-10T17:54-06:00",
-  "incompletas": 0,
-  "courses": [],
+  "updated_at": "2026-11-10T18:01-06:00",
+  "incompletas": 6,
+  "courses": [
+    {
+      "label": "Programación en R para el análisis de datos",
+      "value": 11,
+      "pct": 100.0,
+      "csv": "data/respuestas-programacion-en-r-para-el-analisis-de-datos.csv",
+      "stats": {
+        "total": 11,
+        "grado": [
+          {
+            "label": "Maestría",
+            "value": 6
+          },
+          {
+            "label": "Bachillerato",
+            "value": 3
+          },
+          {
+            "label": "Licenciatura",
+            "value": 2
+          }
+        ],
+        "horario": [
+          {
+            "label": "De 5:00 p. m. a 9:00 p. m.",
+            "value": 6
+          },
+          {
+            "label": "De 8:00 a. m. a 12:00 m. d. (medio día)",
+            "value": 3
+          },
+          {
+            "label": "Me sirve cualquiera de los dos horarios",
+            "value": 2
+          }
+        ],
+        "provincia": [
+          {
+            "label": "San José",
+            "value": 0
+          },
+          {
+            "label": "Alajuela",
+            "value": 0
+          },
+          {
+            "label": "Cartago",
+            "value": 0
+          },
+          {
+            "label": "Heredia",
+            "value": 0
+          },
+          {
+            "label": "Guanacaste",
+            "value": 0
+          },
+          {
+            "label": "Puntarenas",
+            "value": 0
+          },
+          {
+            "label": "Limón",
+            "value": 0
+          }
+        ],
+        "provincia_sin_dato": 11,
+        "sector": [
+          {
+            "label": "Gobierno Central",
+            "value": 0
+          },
+          {
+            "label": "Resto del sector público",
+            "value": 0
+          },
+          {
+            "label": "Sector privado",
+            "value": 0
+          },
+          {
+            "label": "Organismos internacionales",
+            "value": 0
+          },
+          {
+            "label": "Otro",
+            "value": 0
+          }
+        ],
+        "sector_sin_dato": 11,
+        "daily": [
+          {
+            "date": "2026-10-15",
+            "nuevos": 6,
+            "acumulado": 6
+          },
+          {
+            "date": "2026-10-16",
+            "nuevos": 4,
+            "acumulado": 10
+          },
+          {
+            "date": "2026-10-22",
+            "nuevos": 1,
+            "acumulado": 11
+          }
+        ]
+      }
+    }
+  ],
   "personal_data_public": false,
-  "total": 0,
-  "grado": [],
-  "horario": [],
+  "total": 11,
+  "grado": [
+    {
+      "label": "Maestría",
+      "value": 6
+    },
+    {
+      "label": "Bachillerato",
+      "value": 3
+    },
+    {
+      "label": "Licenciatura",
+      "value": 2
+    }
+  ],
+  "horario": [
+    {
+      "label": "De 5:00 p. m. a 9:00 p. m.",
+      "value": 6
+    },
+    {
+      "label": "De 8:00 a. m. a 12:00 m. d. (medio día)",
+      "value": 3
+    },
+    {
+      "label": "Me sirve cualquiera de los dos horarios",
+      "value": 2
+    }
+  ],
   "provincia": [
     {
       "label": "San José",
@@ -38,7 +173,7 @@
       "value": 0
     }
   ],
-  "provincia_sin_dato": 0,
+  "provincia_sin_dato": 11,
   "sector": [
     {
       "label": "Gobierno Central",
@@ -61,6 +196,22 @@
       "value": 0
     }
   ],
-  "sector_sin_dato": 0,
-  "daily": []
+  "sector_sin_dato": 11,
+  "daily": [
+    {
+      "date": "2026-10-15",
+      "nuevos": 6,
+      "acumulado": 6
+    },
+    {
+      "date": "2026-10-16",
+      "nuevos": 4,
+      "acumulado": 10
+    },
+    {
+      "date": "2026-10-22",
+      "nuevos": 1,
+      "acumulado": 11
+    }
+  ]
 }
